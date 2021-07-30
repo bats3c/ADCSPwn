@@ -52,6 +52,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="EFSTrigger.cs" />
     <Compile Include="Networking.cs" />
+    <Compile Include="PKCS12 .cs" />
     <Compile Include="RelayServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

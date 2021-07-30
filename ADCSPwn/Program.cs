@@ -43,6 +43,8 @@ namespace ADCSPwn
 
         static void ParseArgs(string[] args)
         {
+           
+
             int iter = 0;
             foreach (string item in args)
             {
@@ -83,7 +85,7 @@ namespace ADCSPwn
 
         static void Main(string[] args)
         {
-          
+           
             ShowBanner();
 
 
