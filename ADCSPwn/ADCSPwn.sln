@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADCSPwn", "ADCSPwn.csproj", "{980EF05F-87D1-4A0A-932A-582FB1BC3AC3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{980EF05F-87D1-4A0A-932A-582FB1BC3AC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{980EF05F-87D1-4A0A-932A-582FB1BC3AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{980EF05F-87D1-4A0A-932A-582FB1BC3AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{980EF05F-87D1-4A0A-932A-582FB1BC3AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FB2236B-91A0-40A2-B28D-523E47B1D98D}
+	EndGlobalSection
+EndGlobal
