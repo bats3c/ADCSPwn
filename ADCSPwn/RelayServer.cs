@@ -442,8 +442,27 @@ namespace ADCSPwn
                         string b64_bundle = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bundle));
 
                         Console.WriteLine("      |_ SUCCESS\n\n");
+                        if (string.IsNullOrEmpty(Config.outpath))
+                        {
+                            Console.WriteLine(b64_bundle);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                File.WriteAllText(Config.outpath, b64_bundle);
+                                Console.WriteLine($"[i] Certificate written to {Config.outpath}");
+                            }
+                            catch (Exception ex)
+                            {
 
-                        Console.WriteLine(b64_bundle);
+                                Console.WriteLine($"[!] Failed to write certificate to {Config.outpath}!");
+                                Console.WriteLine(b64_bundle);
+                            }
+                           
+                        }
+
+                       
 
                         DieOnNextRun = true;
 
