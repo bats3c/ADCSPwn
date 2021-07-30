@@ -1,6 +1,6 @@
 # ADCSPwn
 
-A tool to escalate privileges in an active directory network by coercing authenticate from machine accounts and relaying to certificate services.
+A tool to escalate privileges in an active directory network by coercing authenticate from machine accounts and relaying to the certificate service.
 
 ## Usage
 
