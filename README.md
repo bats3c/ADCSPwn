@@ -1,6 +1,6 @@
 # ADCSPwn
 
-A tool to escalate privileges in an active directory network by coercing authenticate from machine accounts and relaying to the certificate service.
+A tool to escalate privileges in an active directory network by coercing authenticate from machine accounts (Petitpotam) and relaying to the certificate service.
 
 ## Usage
 
@@ -8,6 +8,7 @@ Run `ADCSPwn` on your target network.
 
 ```
 Author: @_batsec_ - MDSec ActiveBreach
+Contributor: @Flangvik -  TrustedSec
 
 adcspwn.exe --adcs <cs server> --port [local port] --remote [computer]
 

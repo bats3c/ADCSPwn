@@ -39,6 +39,7 @@ namespace ADCSPwn
         {
             Console.WriteLine(Config.banner);
             Console.WriteLine("Author: @_batsec_ - MDSec ActiveBreach\n");
+            Console.WriteLine("Contributor: @Flangvik -  TrustedSec\n");
         }
 
         static void ParseArgs(string[] args)
