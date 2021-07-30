@@ -19,8 +19,8 @@ namespace ADCSPwn
             Console.WriteLine("\nOptional arguments:");
             Console.WriteLine("port\t\t-\tThe port ADCSPwn will listen on.");
             Console.WriteLine("remote\t\t-\tRemote machine to trigger authentication from.");
-            Console.WriteLine("username\t\t-\tUsername for non-domain context.");
-            Console.WriteLine("password\t\t-\tPassword for non-domain context.");
+            Console.WriteLine("username\t-\tUsername for non-domain context.");
+            Console.WriteLine("password\t-\tPassword for non-domain context.");
             Console.WriteLine("dc\t\t-\tDomain controller to query for Certificate Templates (LDAP).");
             Console.WriteLine("unc\t\t-\tSet custom UNC callback path for EfsRpcOpenFileRaw (Petitpotam) .");
             Console.WriteLine("output\t\t-\tOutput path to store base64 generated crt.");
