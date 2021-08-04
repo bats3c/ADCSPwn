@@ -38,7 +38,7 @@ namespace ADCSPwn
         static void ShowBanner()
         {
             Console.WriteLine(Config.banner);
-            Console.WriteLine("Author: @_batsec_ - MDSec ActiveBreach\n");
+            Console.WriteLine("Author: @_batsec_ - MDSec ActiveBreach");
             Console.WriteLine("Contributor: @Flangvik -  TrustedSec\n");
         }
 
