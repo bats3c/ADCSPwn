@@ -38,7 +38,7 @@ namespace ADCSPwn
             }else if (!string.IsNullOrEmpty(dc))
             {
                 DirEntry = Networking.GetLdapSearchRoot(null
-                    , ""
+                    , Base + System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain().ToString().Replace(".", ",DC=")
                     , dc
                     , System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain().ToString());
                 DirSearch = new DirectorySearcher(DirEntry);
