@@ -379,7 +379,7 @@ namespace ADCSPwn
                                     reader = new StreamReader(dataStream);
                                     responseFromServer = reader.ReadToEnd();
 
-                                    if (responseFromServer.Contains("Certificate Request Denied"))
+                                    if (responseFromServer.Contains("locDenied"))
                                     {
                                         HttpResp.Close();
                                         continue;
