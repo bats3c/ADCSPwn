@@ -9,6 +9,7 @@ namespace ADCSPwn
         public static int port = 8080;
         public static string machine = "localhost";
         public static string adcs = "";
+        public static bool secure = false;
 
         public static string username = "";
         public static string password = "";
