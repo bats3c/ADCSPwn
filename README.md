@@ -9,6 +9,7 @@ Run `ADCSPwn` on your target network.
 ```
 Author: @_batsec_ - MDSec ActiveBreach
 Contributor: @Flangvik -  TrustedSec
+Contributor: @424f424f -  Black Hills Information Security
 
 adcspwn.exe --adcs <cs server> --port [local port] --remote [computer]
 
@@ -16,6 +17,7 @@ Required arguments:
 adcs            -       This is the address of the AD CS server which authentication will be relayed to.
 
 Optional arguments:
+secure          -       Use HTTPS with the certificate service.
 port            -       The port ADCSPwn will listen on.
 remote          -       Remote machine to trigger authentication from.
 username        -       Username for non-domain context.
@@ -26,6 +28,7 @@ output          -       Output path to store base64 generated crt.
 
 Example usage:
 adcspwn.exe --adcs cs.pwnlab.local
+adcspwn.exe --adcs cs.pwnlab.local --secure
 adcspwn.exe --adcs cs.pwnlab.local --port 9001
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local
 adcspwn.exe --adcs cs.pwnlab.local --remote dc.pwnlab.local --port 9001

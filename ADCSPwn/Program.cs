@@ -75,6 +75,9 @@ namespace ADCSPwn
                     case "--output":
                         Config.outpath = args[iter + 1];
                         break;
+                    case "--secure":
+                        Config.secure = true;
+                        break;
                     default:
                         break;
                 }
