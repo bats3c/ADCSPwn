@@ -151,12 +151,6 @@ namespace ADCSPwn
                 HttpReq.Method = method;
                 HttpReq.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
 
-                if (method == "POST")
-                {
-                    HttpReq.ContentType = "application/x-www-form-urlencoded";
-                    HttpReq.ContentLength = payload.Length;
-                }
-
                 if (auth_header.Length != 0)
                 {
                     if (auth_header == "Authorization")
@@ -169,7 +163,10 @@ namespace ADCSPwn
 
                 if (method == "POST")
                 {
+                    HttpReq.ContentType = "application/x-www-form-urlencoded";
+
                     byte[] payload_bytes = Encoding.UTF8.GetBytes(payload);
+                    HttpReq.ContentLength = payload_bytes.Length;
 
                     Stream ReqStream = HttpReq.GetRequestStream();
                     ReqStream.Write(payload_bytes, 0, payload_bytes.Length);
